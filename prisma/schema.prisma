@@ -1,0 +1,97 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Goal {
+  id          String   @id @default(cuid())
+  title       String
+  description String   @default("")
+  category    String   @default("Personal")
+  progress    Int      @default(0)
+  deadline    DateTime?
+  status      String   @default("Not Started")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model WishlistItem {
+  id          String   @id @default(cuid())
+  name        String
+  description String   @default("")
+  targetPrice Float
+  savedAmount Float    @default(0)
+  category    String   @default("Other")
+  priority    String   @default("Medium")
+  targetDate  DateTime?
+  status      String   @default("Planning")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  transactions Transaction[]
+}
+
+model Transaction {
+  id           String         @id @default(cuid())
+  amount       Float
+  type         String
+  category     String
+  note         String         @default("")
+  date         DateTime       @default(now())
+  wishlistItem WishlistItem?  @relation(fields: [wishlistItemId], references: [id], onDelete: SetNull)
+  wishlistItemId String?
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+}
+
+model DiaryEntry {
+  id        String   @id @default(cuid())
+  date      DateTime @default(now())
+  title     String
+  mood      String
+  content   String
+  tags      String   @default("")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Habit {
+  id          String            @id @default(cuid())
+  name        String
+  frequency   String            @default("Daily")
+  completions HabitCompletion[]
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+}
+
+model HabitCompletion {
+  id        String   @id @default(cuid())
+  date      DateTime
+  habit     Habit    @relation(fields: [habitId], references: [id], onDelete: Cascade)
+  habitId   String
+  createdAt DateTime @default(now())
+  @@unique([habitId, date])
+}
+
+model CalendarEvent {
+  id        String   @id @default(cuid())
+  title     String
+  date      DateTime
+  time      String   @default("")
+  notes     String   @default("")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Note {
+  id        String   @id @default(cuid())
+  title     String
+  content   String
+  tags      String   @default("")
+  pinned    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
