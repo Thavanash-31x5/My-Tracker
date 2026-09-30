@@ -66,7 +66,7 @@ CREATE TABLE "HabitCompletion" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "date" TIMESTAMP(3) NOT NULL,
     "habitId" TEXT NOT NULL,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT "HabitCompletion_habitId_fkey" FOREIGN KEY ("habitId") REFERENCES "Habit" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
@@ -74,7 +74,7 @@ CREATE TABLE "HabitCompletion" (
 CREATE TABLE "CalendarEvent" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "title" TEXT NOT NULL,
-    "date" DATETIME NOT NULL,
+    "date" TIMESTAMP(3) NOT NULL,
     "time" TEXT NOT NULL DEFAULT '',
     "notes" TEXT NOT NULL DEFAULT '',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
